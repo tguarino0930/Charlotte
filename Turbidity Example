@@ -1,0 +1,17 @@
+library("ggplot2") 
+
+CCWQData$station<-'SC203501'
+query1<-CCWQData$`Station ID`!='SC203501' 
+index1<-which(query1)
+CCWQData$station[index1]='other'
+
+results.TURBIDITY<-CCWQData$CHARACTERISTIC_NAME== "TURBIDITY"
+index.turbidity<-which(results.TURBIDITY)
+Turbidity<-CCWQData[index.turbidity,]
+
+ggplot(Turbidity, aes(x = ACTIVITY_START_DATE, y= RESULT_VALUE, color = `station`)) +
+  geom_point() +
+  labs(title = 'Turbidity in Charlotte County Regions',
+       x = 'Sample Date',
+       y = 'Value (NTU)')+
+  geom_hline(yintercept=mean(Turbidity$RESULT_VALUE))
