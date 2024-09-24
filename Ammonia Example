@@ -1,0 +1,3 @@
+results.ammonia<-CCWQData$CHARACTERISTIC_NAME=='AMMONIA NITROGEN'
+index.ammonia<-which(results.ammonia)
+ammonia=CCWQData[index.ammonia,]
