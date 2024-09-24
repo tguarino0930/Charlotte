@@ -1,3 +1,18 @@
+#install.packages("ggplot2")        # Install ggplot2 package
+library("ggplot2") 
+
 results.ammonia<-CCWQData$CHARACTERISTIC_NAME=='AMMONIA NITROGEN'
 index.ammonia<-which(results.ammonia)
 ammonia=CCWQData[index.ammonia,]
+
+ggplot(ammonia, aes(x = ACTIVITY_START_DATE, y = RESULT_VALUE, color = Region)) +
+  geom_point() +
+  labs(title = ' Ammonia Nitrogen (mg/L) in Charlotte County Regions',
+       x = 'Sample Date',
+       y = 'Value (mg/L)')
+
+ggplot(ammonia, aes(x = ACTIVITY_START_DATE, y= RESULT_VALUE, color = Type)) +
+  geom_point() +
+  labs(title = 'Ammonia Nitrogen (mg/L) in Charlotte County',
+       x = 'Sample Date',
+       y = 'Value (mg/L)')
