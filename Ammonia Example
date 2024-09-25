@@ -1,16 +1,24 @@
 #install.packages("ggplot2")        # Install ggplot2 package
 library("ggplot2") 
 
+#load document
+library(readxl)
+CCWQData <- read_excel("ccwq.xlsx")
+View(CCWQData)
+
+#query for just ammonia results
 results.ammonia<-CCWQData$CHARACTERISTIC_NAME=='AMMONIA NITROGEN'
 index.ammonia<-which(results.ammonia)
 ammonia=CCWQData[index.ammonia,]
 
+#plot ammonia by Region
 ggplot(ammonia, aes(x = ACTIVITY_START_DATE, y = RESULT_VALUE, color = Region)) +
   geom_point() +
   labs(title = ' Ammonia Nitrogen (mg/L) in Charlotte County Regions',
        x = 'Sample Date',
        y = 'Value (mg/L)')
 
+#plot ammonia by Type
 ggplot(ammonia, aes(x = ACTIVITY_START_DATE, y= RESULT_VALUE, color = Type)) +
   geom_point() +
   labs(title = 'Ammonia Nitrogen (mg/L) in Charlotte County',
