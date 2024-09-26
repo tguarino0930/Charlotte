@@ -15,3 +15,53 @@ ggplot(Turbidity, aes(x = ACTIVITY_START_DATE, y= RESULT_VALUE, color = `station
        x = 'Sample Date',
        y = 'Value (NTU)')+
   geom_hline(yintercept=mean(Turbidity$RESULT_VALUE))
+
+
+results.TURBIDITY<-CCWQData$CHARACTERISTIC_NAME== "TURBIDITY" & CCWQData$Type != 'NA'
+index.turbidity<-which(results.TURBIDITY)
+Turbidity<-CCWQData[index.turbidity,]
+
+ggplot(Turbidity, aes(x = ACTIVITY_START_DATE, y= RESULT_VALUE, color = `station`)) +
+    geom_point() +
+    labs(title = 'Turbidity in Charlotte County Regions',
+         x = 'Sample Date',
+         y = 'Value (NTU)')+
+    geom_hline(yintercept=mean(Turbidity$RESULT_VALUE))
+  
+
+library(Rmisc)
+    TurbiditySE <- summarySE(Turbidity, measurevar="RESULT_VALUE",
+                            groupvars=c( "Region","Type"))
+
+
+ggplot(TurbiditySE,aes(fill=Region, y=RESULT_VALUE , x=Type))+
+  geom_bar(position='dodge', stat='identity')+
+  geom_errorbar(aes(ymin=RESULT_VALUE-se, ymax=RESULT_VALUE+se), width=.2,
+                position=position_dodge(.9))+
+  theme_minimal()+
+  labs(x='Type',y='Value (NTU)', title = 'Turbidity(NTU) by Region and Type')+
+  theme(plot.title = element_text(hjust=0.5, size=20, face='bold'))+
+  scale_fill_manual('Region',, values=c('cadetblue1', 'cadetblue3','cadetblue'))
+
+install.packages("languageserver")
+
+
+CCWQData$station<-'SC203501'
+query1<-CCWQData$`Station ID`!='SC203501' 
+index1<-which(query1)
+CCWQData$station[index1]='other'
+
+results.TURBIDITY<-CCWQData$CHARACTERISTIC_NAME== "TURBIDITY" & CCWQData$Type != 'NA'
+index.turbidity<-which(results.TURBIDITY)
+Turbidity<-CCWQData[index.turbidity,]
+
+
+ggplot(Turbidity, aes(x = ACTIVITY_START_DATE, y= RESULT_VALUE, color = station)) +
+  geom_point() +
+  labs(title = 'Turbidity in Charlotte County Regions',
+       x = 'Sample Date',
+       y = 'Value (NTU)')+
+  geom_hline(yintercept=mean(Turbidity$RESULT_VALUE))+
+  theme(plot.title = element_text(hjust=0.5, size=20, face='bold'))+
+  labs(color = "Station") +
+  scale_y_continuous(limits = c(0, 65))
